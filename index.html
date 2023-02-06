@@ -8,15 +8,56 @@
 </head>
 <body>
     <h1>Test</h1>
-    <form>
-        <input type="number" placeholder="Input Angka" required>
-        <button>Generate Segitiga</button>
-        <button id="generate_bilangan_ganjil">Generate Bilangan Ganjil</button>
-        <button>Generate Bilangan Prima</button>
-    </form>
-    <h2>Result:</h2>
+    <!-- <form> -->
+    <input id="input_angka_max" type="number" placeholder="Input Angka" required>
+    <button>Generate Segitiga</button>
+    <button id="generate_bilangan_ganjil">Generate Bilangan Ganjil</button>
+    <button id="generate_bilangan_prima">Generate Bilangan Prima</button>
+    <!-- </form> -->
+    <h2>Result: <span id="result"></span></h2>
 </body>
 <script>
+    let elh_result = document.getElementById('result');
+
+    // Elh Input angka maksimal
+    let elh_input_angka_max = document.getElementById('input_angka_max');
     
+    // 1. Input angka maksimal button
+    elh_input_angka_max.addEventListener('change', () => {
+        let input_angka_max_val = parseInt(elh_input_angka_max.value);
+        
+        // Validasi angka
+        if(typeof(input_angka_max_val) != String){
+            // == 2. Generate bilangan ganjil
+            let gen_bilangan_ganjil = document.getElementById('generate_bilangan_ganjil')
+            // Gen bilangan ganjil button
+            gen_bilangan_ganjil.addEventListener('click', () => {
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    console.log(elh_result.innerHTML = `Bilangan ganjil dari 0-${input_angka_max_val} adalah: ` + JSON.parse(this.responseText).ganjil_generated)
+                }
+
+                // /generate-bilangan-ganjil/:angka_maksimal
+                xhttp.open('GET', `http://localhost:5000/generate-bilangan-ganjil/${input_angka_max_val}`);
+                xhttp.send()
+            });
+            // == 2. End of generate bilangan ganjil
+            
+            // == 2. Generate bilangan prima
+            let gen_bilangan_prima = document.getElementById('generate_bilangan_prima')
+            // Gen bilangan prima button
+            gen_bilangan_prima.addEventListener('click', () => {
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    console.log(elh_result.innerHTML = `Bilangan prima dari 0-${input_angka_max_val} adalah: ` + JSON.parse(this.responseText).prima_generated)
+                }
+
+                // /generate-bilangan-prima/:angka_maksimal
+                xhttp.open('GET', `http://localhost:5000/generate-bilangan-prima/${input_angka_max_val}`);
+                xhttp.send()
+            });
+            // == 2. End of generate bilangan prima
+        }
+    });
 </script>
 </html>
